@@ -22,6 +22,9 @@
     "url": "https://github.com/52cik/tinypng-cli/issues"
   },
   "homepage": "https://github.com/52cik/tinypng-cli#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "dependencies": {
     "got": "^10.7.0",
     "meow": "^6.1.0",
