@@ -1,6 +1,6 @@
 {
   "name": "@52cik/tinypng-cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "command line tool for tinypng",
   "main": "lib/index.js",
   "bin": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/52cik/tinypng-cli#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
+    "@52cik:registry": "https://registry.npmjs.org",
     "access": "public"
   },
   "dependencies": {
