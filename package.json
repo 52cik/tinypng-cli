@@ -1,0 +1,32 @@
+{
+  "name": "@52cik/tinypng-cli",
+  "version": "0.1.0",
+  "description": "command line tool for tinypng",
+  "main": "lib/index.js",
+  "bin": {
+    "tinypng": "bin/cli"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/52cik/tinypng-cli.git"
+  },
+  "keywords": [
+    "mini image"
+  ],
+  "author": "楼教主 <fe.52cik@gmail.com> (https://www.52cik.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/52cik/tinypng-cli/issues"
+  },
+  "homepage": "https://github.com/52cik/tinypng-cli#readme",
+  "dependencies": {
+    "got": "^10.7.0",
+    "meow": "^6.1.0",
+    "ora": "^4.0.3",
+    "through2-concurrent": "^2.0.0",
+    "vinyl-fs": "^3.0.3"
+  }
+}

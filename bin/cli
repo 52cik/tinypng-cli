@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+const { resolve } = require('path');
+const { existsSync } = require('fs');
+const meow = require('meow');
+const entry = require('..');
+
+const cli = meow(
+  `
+Usage
+  $ tinypng <input>
+
+Options
+  -e  png,jpg,jpeg. default: png
+  -o  dist
+  --help, -h     show help
+  --version, -v  versions
+
+Examples
+  $ tinypng images
+  $ tinypng images -o img
+  $ tinypng images -e png,jpg -o img
+`,
+  {
+    flags: {
+      help: {
+        type: 'boolean',
+        alias: 'h',
+      },
+      version: {
+        type: 'boolean',
+        alias: 'v',
+      },
+    },
+  },
+);
+
+if (cli.flags.v) {
+  cli.showVersion();
+  process.exit();
+}
+
+if (cli.flags.h || !cli.input[0]) {
+  cli.showHelp();
+  process.exit();
+}
+
+const target = cli.input[0];
+const exts = (cli.flags.e || 'png').split(',');
+let dist = cli.flags.o || 'tinified';
+let path = process.cwd();
+
+if (target && target !== '.') {
+  path = resolve(path, target);
+}
+
+if (existsSync(dist)) {
+  const dt = new Date();
+  const date = [
+    [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()].join('-'),
+    [dt.getHours(), dt.getMinutes(), dt.getSeconds()].join('-'),
+  ]
+    .join('-')
+    .replace(/(?=\b\d\b)/g, '0')
+    .replace(/-/g, '');
+  dist += `-${date}`;
+}
+
+const glob = `${path}/**/*.@(${exts.join('|')})`;
+
+entry(glob, dist);
