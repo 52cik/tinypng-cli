@@ -1,6 +1,6 @@
 {
   "name": "@52cik/tinypng-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "command line tool for tinypng",
   "main": "lib/index.js",
   "bin": {
