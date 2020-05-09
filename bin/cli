@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { resolve } = require('path');
-const { existsSync } = require('fs');
+const { existsSync, statSync } = require('fs');
 const meow = require('meow');
 const entry = require('..');
 
@@ -18,6 +18,7 @@ Options
 
 Examples
   $ tinypng images
+  $ tinypng btn*.png
   $ tinypng images -o img
   $ tinypng images -e png,jpg -o img
 `,
@@ -45,27 +46,37 @@ if (cli.flags.h || !cli.input[0]) {
   process.exit();
 }
 
-const target = cli.input[0];
-const exts = (cli.flags.e || 'png').split(',');
-let dist = cli.flags.o || 'tinified';
-let path = process.cwd();
+/** 输入文件，bash 会解析一遍 glob 得到文件数组 */
+const target = cli.input;
 
-if (target && target !== '.') {
-  path = resolve(path, target);
-}
+/** 后缀 */
+const exts = (cli.flags.e || 'png').split(',');
+
+/** 输出目录 */
+let dist = cli.flags.o || 'tinified';
+
+/** 工作目录 */
+let cwd = process.cwd();
+
+/** 最终使用的 glob 数组 */
+const globs = [];
+
+// 将目录转为 glob
+target.forEach((name) => {
+  const stats = statSync(resolve(cwd, name));
+  if (stats.isFile()) {
+    globs.push(name);
+  } else if (stats.isDirectory()) {
+    globs.push(`${name}/**/*.@(${exts.join('|')})`);
+  }
+});
 
 if (existsSync(dist)) {
   const dt = new Date();
-  const date = [
-    [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()].join('-'),
-    [dt.getHours(), dt.getMinutes(), dt.getSeconds()].join('-'),
-  ]
-    .join('-')
-    .replace(/(?=\b\d\b)/g, '0')
-    .replace(/-/g, '');
+  dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+  const date = dt.toISOString().slice(0, -5).replace(/\D/g, '');
   dist += `-${date}`;
 }
 
-const glob = `${path}/**/*.@(${exts.join('|')})`;
-
-entry(glob, dist);
+// console.log(globs, cwd, dist);
+entry(globs, cwd, dist);
