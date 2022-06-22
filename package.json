@@ -27,7 +27,7 @@
     "access": "public"
   },
   "dependencies": {
-    "got": "^10.7.0",
+    "got": "^11.8.5",
     "meow": "^6.1.0",
     "ora": "^4.0.3",
     "through2-concurrent": "^2.0.0",
